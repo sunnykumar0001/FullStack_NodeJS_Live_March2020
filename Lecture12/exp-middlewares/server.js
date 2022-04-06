@@ -1,4 +1,5 @@
 const express = require('express')
+const lib = require('./lib')
 
 const app = express()
 
@@ -7,7 +8,8 @@ app.use('/', express.static(__dirname + '/public'))
 function decryptQueryParams(req, res ,next) {
 
     // TODO: decrypt all query params as per our logic
-
+    req.query.code = lib.flipCase(req.query.code)
+    // console.log(req.query.code);
     next()
 }
 
@@ -21,10 +23,14 @@ function decodeQueryBase64(req, res, next) {
 }
 
 app.get('/eval', decryptQueryParams, decodeQueryBase64, (req, res) => {
-    console.log(req.query)
+    // console.log(req.query)
 
-    // TODO: eval the code actually
-    res.send('=========== eval result =========')
+    // TODO: eval the code actually // DONE
+    let ans = eval(req.query.code);
+    // console.log(ans);
+    res.write('=========== Eval Result =========')
+    res.write('\nEvaluation : ' + ans)
+    res.send()
 })
 
 app.listen(4545, () => {
