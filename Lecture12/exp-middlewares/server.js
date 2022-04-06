@@ -16,7 +16,7 @@ function decryptQueryParams(req, res ,next) {
 function decodeQueryBase64(req, res, next) {
     for (let q in req.query) {
         let data = req.query[q] 
-        data = new Buffer(data, 'base64').toString('ascii')
+        data = new Buffer.from(data, 'base64').toString('ascii')
         req.query[q] = data
     }
     next()
@@ -36,3 +36,4 @@ app.get('/eval', decryptQueryParams, decodeQueryBase64, (req, res) => {
 app.listen(4545, () => {
     console.log('server started on http://localhost:4545')
 })
+
